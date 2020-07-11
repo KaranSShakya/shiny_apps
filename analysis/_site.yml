@@ -5,10 +5,8 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+  - text: Import
+    href: shiny_import.html
 output:
   workflowr::wflow_html:
     toc: yes
