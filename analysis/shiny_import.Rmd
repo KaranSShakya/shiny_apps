@@ -19,9 +19,7 @@ library(readxl)
 ```{r eval=T, echo=F}
 fileInput("file", "Upload the File")
 tableOutput("input_file")
-```
 
-```{r eval=T, echo=F}
 renderTable({
     file_to_read = input$file
     if (is.null(file_to_read)){
