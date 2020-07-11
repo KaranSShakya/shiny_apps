@@ -23,8 +23,12 @@ tableOutput("input_file")
 
 ```{r eval=T, echo=F}
 renderTable({
-    table <- read.table(file_to_read$datapath, sep=",", header=T)
-    input.table <- as.data.frame(table)
-    input.table %>% head(5)
-})
+    file_to_read = input$file
+    if (is.null(file_to_read)){
+      return()
+    }
+    use.table <- read.table(file_to_read$datapath, sep=",", header=T)
+    main.data <- as.data.frame(use.table) %>% 
+      head(10)
+  })
 ```
