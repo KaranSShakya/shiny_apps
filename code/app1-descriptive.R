@@ -19,10 +19,11 @@ ui <- shinyUI(fluidPage(
       selectInput("Col", "Column",
                   choices = colnames(data.set)),
       selectInput("Plot", "Plot Type",
-                  choices = c("Boxplot", "Distribution Plot", "Q-Q Plot")),
+                  choices = c("Boxplot", "Density Distribution", "Q-Q Plot")),
     ),
     mainPanel(
-      plotOutput("Descriptive")
+      plotOutput("Descriptive"),
+      plotOutput("Table")
     )
   )
 ))
@@ -30,22 +31,37 @@ ui <- shinyUI(fluidPage(
 # server ----
 server <- shinyServer(function(input, output){
   output$Descriptive <- renderPlot({
-    
-    plotdata <- data.set %>% 
+    data.plot <- data.set %>% 
       select(input$Col)
+    names(data.plot)[1] <- "Col_name"
     
-    if (input$Plot == "Boxplot"){
-      ggplot(plotdata, aes(y=input$Col))+
-        geom_boxplot()
-    } else if (input$Plot == "Distribution Plot"){
-      ggplot(plotdata, aes(x=input$Col))+
-        geom_density()
-    } else if (input$Plot == "Q-Q Plot"){
-      ggplot(plotdata, aes(sample=input$Col))+
-        stat_qq()
+  if (input$Plot == "Boxplot"){
+    ggplot(data.plot, aes(x=Col_name))+
+      geom_boxplot()+
+      labs(x=input$Col)
+    } 
+  else if (input$Plot == "Density Distribution"){
+    ggplot(data.plot, aes(x=Col_name))+
+      geom_density()+
+      labs(x=input$Col)
     }
+  else if (input$Plot == "Q-Q Plot"){
+    ggplot(data.plot, aes(sample=Col_name))+
+      stat_qq()+
+      labs(x=input$Col)
+    }
+    })
+  
+  output$Table <- renderTable({
+    data.table <- data.set %>% 
+      select(input$Col)
+    names(data.table)[1] <- "Col_name"
+    
+    as.array(summary(data.table$Col_name))
+   
   })
 })
 
 # App Run ----
 shinyApp(ui = ui, server = server)
+
