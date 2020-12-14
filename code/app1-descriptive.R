@@ -23,7 +23,7 @@ ui <- shinyUI(fluidPage(
     ),
     mainPanel(
       plotOutput("Descriptive"),
-      plotOutput("Table")
+      verbatimTextOutput("Table")
     )
   )
 ))
@@ -52,7 +52,7 @@ server <- shinyServer(function(input, output){
     }
     })
   
-  output$Table <- renderTable({
+  output$Table <- renderPrint({
     data.table <- data.set %>% 
       select(input$Col)
     names(data.table)[1] <- "Col_name"
